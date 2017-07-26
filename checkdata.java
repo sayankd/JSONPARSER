@@ -27,6 +27,10 @@ class checkdata
 		System.out.println("res"+res);
 		return 'a';
 	}
+	public void   prev()
+	{
+		this.i = this.i-1;
+	}
 	public boolean value(char s)
 	{
 		System.out.println("a"+s);
@@ -53,6 +57,13 @@ class checkdata
 			//System.out.println("cc");
 			res =  CheckObject();
 			System.out.println("cc"+res);
+			return res;
+		}
+		if((Character.isDigit(s)==true)||s=='-')
+		{
+			boolean res;
+			res = CheckInteger(s);
+			System.out.println("dd"+res);
 			return res;
 		}
 		return false;
@@ -165,5 +176,34 @@ class checkdata
 			return true;
 		return false;
 	}
-	
+	public boolean CheckInteger(char ch)
+	{
+		System.out.println("hello");
+		String s = checknumber(ch);
+		System.out.println("xxxxxxx"+s);
+		try
+		{
+			Double d = Double.parseDouble(s);
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println("adsas");
+			return false;
+		}
+		return true;
+	}
+	public String checknumber(char ch)
+	{
+		
+		String x="";
+		while(Character.isDigit(ch)||(ch=='.')||(ch=='+')||(ch=='-')||(ch=='e'))
+		{
+			x = x+ch;
+			System.out.println(x);
+			ch = next();
+		}
+		prev();
+		return x;
+	}
 }
