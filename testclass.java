@@ -5,9 +5,11 @@ class testclass
 	{
 		String s;
 		int i;
-		s = "[\"Ford\",\"BMW\",\"Fiat\",true,null,false]";
-		//s = "{\"alan\"\"jake\",\"car\":[\"Ford\",\"BMW\",\"Fiat\",true,null,false]";
-                checkdata c = new checkdata(s);
+		//s = "[\"Ford\",\"BMW\",\"Fiat\",true,null,false]";
+		s = "{\"alan\":123,\"jake\":44,\"car\":[\"Ford\",\"BMW\",\"Fiat\",triue,null,false]}";
+                //s = "[\"Ford\",123,\"Fiat\",true,null,false,1.234,7.6e+7]";
+                
+		checkdata c = new checkdata(s);
 		c.next();
 		
 		

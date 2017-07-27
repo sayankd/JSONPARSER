@@ -1,3 +1,4 @@
+import java.util.*;
 class checkdata
 {
 	public String p;
@@ -10,12 +11,31 @@ class checkdata
 	}
 	public char next()
 	{
-		boolean res=false;
+		//ArrayList<Object> arr = new ArrayList<Object>();
+		Object arr;
+		//boolean res=false;
 		if(i==0)
 		{
 			System.out.println("ddx");
-			res = value(p.charAt(i++));
-                        System.out.println("ddy"+res);
+			arr = value(p.charAt(i++));
+			//arr = (ArrayList<Object>)arr;
+			System.out.println();
+			System.out.println(arr);
+			System.out.println();
+			//System.out.println("aaaaaa"+((HashMap<String,Object>)arr));
+			//Set<Entry<String,Object>> hashSet=(HashMap<String,Object>)arr.entrySet();
+			if(arr==null)
+			{
+				System.out.println("There is error");
+			}
+			else
+			{
+			for(Map.Entry<String, Object> er:((HashMap<String,Object>)arr).entrySet())
+			{
+				System.out.println("Key = "+er.getKey()+"Value = "+er.getValue());
+			}
+			}
+                        //System.out.println("ddy"+res);
 
 		}
 		else if(i<p.length())
@@ -23,16 +43,17 @@ class checkdata
 		
 			return (p.charAt(i++));
 		}
-		System.out.println("dd");
-		System.out.println("res"+res);
+		//System.out.println("dd");
+		//System.out.println("res"+res);
 		return 'a';
 	}
 	public void   prev()
 	{
 		this.i = this.i-1;
 	}
-	public boolean value(char s)
+	public Object value(char s)
 	{
+		try{
 		System.out.println("a"+s);
 		if(s == 'n')
 		{
@@ -53,31 +74,36 @@ class checkdata
 		}
 		if(s=='{')
 		{
-			boolean res;
+			 Object res;
 			//System.out.println("cc");
 			res =  CheckObject();
-			System.out.println("cc"+res);
+			//System.out.println("cc"+res);
 			return res;
+		}
+		if(s==':')
+		{
+			new ModifiedException("No opening brace of object");
 		}
 		if((Character.isDigit(s)==true)||s=='-')
 		{
-			boolean res;
+			Double res;
 			res = CheckInteger(s);
 			System.out.println("dd"+res);
 			return res;
 		}
-		return false;
+		}catch(ModifiedException e){System.out.println(e.getMessage());}
+		return null;
 	}
-	public boolean checknull()
+	public Integer checknull() throws ModifiedException
 	{
 		if((next()=='u')&&(next()=='l')&&(next()=='l'))
 		{
-			return true;
+			return null;
 		}
 		else
-			return false;
+			throw new ModifiedException("It should be null");
 	}
-	public boolean Checkbool(char ch)
+	public boolean Checkbool(char ch) throws ModifiedException
 	{
 		if(ch=='t')
 		{
@@ -86,7 +112,7 @@ class checkdata
 				return true;
 			}
 			else
-				return false;
+				throw new ModifiedException("It should be true");
 		}
 		if(ch=='f')
 		{
@@ -96,11 +122,11 @@ class checkdata
                                 return true;
                         }
                         else
-                                return false;
+                                throw new ModifiedException("It should be false");
 		}
 		return false;
 	}
-	public boolean CheckString()
+	public String CheckString()
 	{
 		char s = next();
 		String y = "";
@@ -109,11 +135,12 @@ class checkdata
 			y=y+s;
 			s = next();
 		}
-		System.out.println("str"+y);
-		return true;
+		System.out.println("str"+y+s);
+		return y;
 	}
-	public boolean CheckArray()
+	public ArrayList<Object> CheckArray() throws ModifiedException
 	{
+		ArrayList<Object> arr = new ArrayList<Object>();
 		char s = next();
 		do
 		{
@@ -125,58 +152,53 @@ class checkdata
 		}
 		if(s=='[')
 		{
-			return false;
+			throw new ModifiedException("] bracket expected");
 		}
 		if(s==']')
 		{
 			System.out.println("xx");
-			return true;
+			return arr;
 		}
-		if(value(s)==false)
-		{
-			return false;
-		}
+		arr.add(value(s));
 		s = next();
 		}while(s==',');
 		System.out.println("pp"+s);
+		System.out.println(arr.size());
 		if(s==']')
-			return true;
-		return false;
+			return arr;
+		 throw  new ModifiedException("Bad Array");
 	}
-	public boolean CheckObject()
+	public HashMap<String,Object> CheckObject() throws ModifiedException
 	{
+		HashMap<String,Object> hm = new HashMap<String,Object>();
 		char s = next();
-		boolean x;
+		String  x;
+		Object y;
 		do
 		{
 			if(s==',')
 				s = next();
 			if(s=='{')
-				return false;
+				throw new ModifiedException("{ this one not valid");
 			if(s=='}')
-				return true;
-			x = value(s);
-			if(x==false)
-			{
-				return false;
-			}
+				return hm;
+			x = (String)value(s);
 			s = next(); 
-			if((x==true) && (s!=':'))
+			if(s!=':')
 			{
-				System.out.println("bb");
-				return false;
+				throw new ModifiedException(": this expected before"+s);
 			}
 			s = next();
-			x = value(s);
-			if(x==false)
-				return false;
+			System.out.println("obj"+s);
+			y = value(s);
+			hm.put(x,y);
 			s = next();
 		}while(s==',');
 		if(s=='}')
-			return true;
-		return false;
+			return hm;
+		throw new ModifiedException("Bad Object at"+s);
 	}
-	public boolean CheckInteger(char ch)
+	public Double CheckInteger(char ch) throws ModifiedException
 	{
 		System.out.println("hello");
 		String s = checknumber(ch);
@@ -184,14 +206,14 @@ class checkdata
 		try
 		{
 			Double d = Double.parseDouble(s);
+			return d;
 			
 		}
 		catch(Exception e)
 		{
-			System.out.println("adsas");
-			return false;
+			throw new ModifiedException("Invalid Number");
 		}
-		return true;
+		//return null;
 	}
 	public String checknumber(char ch)
 	{
